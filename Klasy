@@ -22,7 +22,7 @@ public:
 	long int pesel;
 };
 
-class Pacjent : Osoba
+class Pacjent public : Osoba
 {
 public:
 	string zarezerwowanyTermin;
@@ -32,7 +32,7 @@ public:
 };
 
 
-class Lekarz : Osoba
+class Lekarz public : Osoba
 {
 public:
 	string specjalizacja;
@@ -74,7 +74,7 @@ public:
 };
 
 
-class Recepta : Porada 
+class Recepta public : Porada 
 {
 public:
 	string tresc;
@@ -100,7 +100,7 @@ public:
 	int neurolog;
 	int psycholog;
 	int okulista;
-	void wyswietlCennikl();
+	void wyswietlCennik();
 };
 
 
