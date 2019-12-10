@@ -1,0 +1,134 @@
+#include "stdafx.h"
+
+#include <iostream> 
+#include <windows.h> 
+#include <assert.h>
+#include <string>
+using namespace std;
+
+void czyZarezerwowanyTermin(Termin t)
+{
+	assert(t == 1);
+	cout << "zarezerwowany" << endl;
+}
+
+
+class Osoba
+{
+public:
+	string imie;
+	string nazwisko;
+	string adres;
+	long int pesel;
+};
+
+class Pacjent : Osoba
+{
+public:
+	string zarezerwowanyTermin;
+	void wczytajDane();
+	void wyswietlDane();
+	class Pacjent nowyPacjant(Osoba P1);
+};
+
+
+class Lekarz : Osoba
+{
+public:
+	string specjalizacja;
+	int godzinaRozpoczeciaPracy;
+	int godzinaZakonczeniaPracy;
+	void wczytajDane();
+	void wyswietlDane();
+	class Lekarz nowyLekarz(Osoba L1);
+	void wypiszRecepte();
+	void udzielPoradyInt();
+};
+
+
+class KartaChorob
+{public:
+	string diagnoza;
+	string szczepienia;
+	string dataOstatniejChoroby;
+	void wyswietlKarteChorob(Pacjent P);
+};
+
+class Porada
+{public:
+	int koszt;
+	string typ;
+	void dodaniePorady(string specjalizacja);
+	string dodanieZapytaniaInt();
+	bool zatwierdzeniePorady();
+	string dodanieReceptyOczek();
+	string wyborTypu();
+};
+
+class Rejestracja
+{
+public:
+	void sprawdzenieDanych();
+	bool potwierdzeniePlatnosci();
+	bool zatwierdzeniePorady();
+};
+
+
+class Recepta : Porada 
+{
+public:
+	string tresc;
+	string data;
+};
+
+class ZapytanieInt : Porada 
+{
+public:
+	string tresc;
+	string data;
+};
+
+class Cennik
+{
+public:
+	int poradaOgolna;
+	int dentysta;
+	int laryngolog;
+	int dermatolog;
+	int ortodonta;
+	int kardiolog;
+	int neurolog;
+	int psycholog;
+	int okulista;
+	void wyswietlCennikl();
+};
+
+
+class Termin
+{public:
+	string data;
+	int godzina;
+	bool zarezerwowany;
+	void zarezerwujTermin();
+	{
+		//aktualizujgrafik(wybrany termin);
+	}
+	void wyswietlTerminy;
+	void wyswietlDostLekarzy(string specjalizacja);
+};
+
+
+class Harmonogram
+{public:
+	bool grafikLekarza[5][14];
+	void aktualizujGrafik();
+	void wyswietlGrafikLekarza(Lekarz L);
+	void wyswietlZapytaniaInt();
+	void wyswietlReceptyOczek();
+	void aktualizujPrzyszleTerminy();
+};
+
+
+int main()
+{
+}
