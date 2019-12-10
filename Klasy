@@ -81,7 +81,7 @@ public:
 	string data;
 };
 
-class ZapytanieInt : Porada 
+class ZapytanieInt public : Porada 
 {
 public:
 	string tresc;
