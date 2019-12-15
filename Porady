@@ -1,0 +1,160 @@
+
+class ZapytanieInt 
+{
+public:
+	friend class Porada;
+	string tresc;
+	string specjalizacja;
+	int dzien;
+	int miesiac;
+	int rok;
+	int godzina;
+	int minuta;
+	int sekunda;
+	ZapytanieInt(string trescZ, string specjalizacjaZ, int dzienZ, int miesiacZ, int rokZ, int godzinaZ, int minutaZ, int sekundaZ);
+
+};
+
+ZapytanieInt::ZapytanieInt(string trescZ, string specjalizacjaZ, int dzienZ, int miesiacZ, int rokZ, int godzinaZ, int minutaZ, int sekundaZ)
+{
+	tresc = trescZ;
+	specjalizacja = specjalizacjaZ;
+	dzien = dzienZ;
+	miesiac = miesiacZ;
+	rok = rokZ;
+	godzina = godzinaZ;
+	minuta = minutaZ;
+	sekunda = sekundaZ;
+}
+
+class Recepta
+{
+public:
+	friend class Porada;
+	string tresc;
+	string data;
+	int dzien;
+	int miesiac;
+	int rok;
+	int godzina;
+	int minuta;
+	int sekunda;
+	Recepta(string trescR, int dzienR, int miesiacR, int rokR, int godzinaR, int minutaR, int sekundaR);
+};
+
+Recepta::Recepta(string trescR, int dzienR, int miesiacR, int rokR, int godzinaR, int minutaR, int sekundaR)
+{
+	tresc = trescR;
+	dzien = dzienR;
+	miesiac = miesiacR;
+	rok = rokR;
+	godzina = godzinaR;
+	minuta = minutaR;
+	sekunda = sekundaR;
+}
+
+class Porada
+{
+public:
+	int koszt;
+	string typ;
+	friend class Recepta;
+	friend class ZapytanieInt;
+	void dodawanie_porady();
+	vector < Recepta > ReceptyOczekujace;
+	vector < ZapytanieInt > ZapytaniaOczekujace;
+	void wyswPorady(Porada porada1);
+	
+};
+
+void Porada :: wyswPorady(Porada porada1)
+{
+		cout << "Uslugi: \n1.-wysw zapytanie internetowe \n2.-wysw recepte oczekujaca "<< endl;
+		int odp2;
+		cin >> odp2;
+
+		if (odp2 == 1)
+		{
+			system("cls");
+			cout << "wysw ZAPYTANIA INTERNETOWEGO" << endl;
+
+			for (int i = 0; i < porada1.ZapytaniaOczekujace.size(); i++)
+			{
+				cout << endl;
+				cout << "tresc: " << porada1.ZapytaniaOczekujace[i].tresc << endl;
+				cout << "specjalziacja: " << porada1.ZapytaniaOczekujace[i].specjalizacja << endl;
+				cout << "Data dodania: " << porada1.ZapytaniaOczekujace[i].dzien << "." << porada1.ZapytaniaOczekujace[i].miesiac << "." << porada1.ZapytaniaOczekujace[i].rok << endl;
+				cout << "Godzina dodania: " << porada1.ZapytaniaOczekujace[i].godzina << ":" << porada1.ZapytaniaOczekujace[i].minuta << ":" << porada1.ZapytaniaOczekujace[i].sekunda << endl;
+			}
+
+
+		}
+		else if (odp2 == 2)
+		{
+			system("cls");
+			cout << "wysw RECEPTY" << endl;
+			for (int i = 0; i < porada1.ReceptyOczekujace.size(); i++)
+			{
+				cout << endl;
+				cout << "tresc: " << porada1.ReceptyOczekujace[i].tresc << endl;
+				cout << "Data dodania: " << porada1.ReceptyOczekujace[i].dzien << "." << porada1.ReceptyOczekujace[i].miesiac << "." << porada1.ReceptyOczekujace[i].rok << endl;
+				cout << "Godzina dodania: " << porada1.ReceptyOczekujace[i].godzina << ":" << porada1.ReceptyOczekujace[i].minuta << ":" << porada1.ReceptyOczekujace[i].sekunda << endl;
+			}
+
+		}
+	}
+
+void Porada ::  dodawanie_porady()
+{
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+	
+	cout << "Uslugi: \n1.-Dodaj zapytanie internetowe \n2.-Dodaj recepte oczekujaca \n3.-Wyjscie" << endl;
+	int odp;
+	cin >> odp;
+
+	if (odp == 1)
+	{
+		system("cls");
+		cout << "DODAWANIE ZAPYTANIA INTERNETOWEGO" << endl;
+		cout << "Podaj tresc: ";
+		string trescZapytania;
+		cin >> trescZapytania;
+		cout << "Podaj specjalizacje :";
+		string specZapytania;
+		cin >> specZapytania;
+		cout << "Data dodania: ";
+		cout << st.wDay << "." << st.wMonth << "." << st.wYear << endl;
+		cout << "Godzina dodania: ";
+		cout << st.wHour << ":" << st.wMinute << ":" << st.wSecond << endl;
+		ZapytaniaOczekujace.push_back(ZapytanieInt(trescZapytania, specZapytania, st.wDay, st.wMonth, st.wYear, st.wHour, st.wMinute, st.wSecond));
+
+	}
+	else if (odp == 2)
+	{
+		system("cls");
+		cout << "DODAWANIE RECEPTY" << endl;
+		cout << "Podaj tresc: ";
+		string trescRecepty;
+		cin >> trescRecepty;
+		cout << "Data dodania: ";
+		cout << st.wDay << "." << st.wMonth << "." << st.wYear << endl;
+		cout << "Godzina dodania: ";
+		cout << st.wHour << ":" << st.wMinute << ":" << st.wSecond << endl;
+		ReceptyOczekujace.push_back(Recepta(trescRecepty, st.wDay, st.wMonth, st.wYear, st.wHour, st.wMinute, st.wSecond));
+
+	}
+}
+
+
+
+int main()
+{
+	Porada porada;
+	porada.dodawanie_porady();
+	porada.wyswPorady(porada);
+
+
+}
+
+
