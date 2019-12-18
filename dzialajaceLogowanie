@@ -232,7 +232,10 @@ Pacjent Pacjent::logowanie()
 	}
 
 	if (PacjenciPlik.eof() && (!czyZnaleziono))
-		cout << "Bledne dane, wpisz ponownie lub zarejestruj sie!\n";
+	{
+		cout << "Bledne dane, wpisz ponownie\n";
+		logowanie();
+	}
 	PacjenciPlik.close();
 	peselGlob = pesel1;
 	Pacjent p;
@@ -403,7 +406,10 @@ Lekarz Lekarz::logowanie()
 	}
 
 	if (LekarzePlik.eof() && (!czyZnaleziono2))
-		cout << "Bledne dane, wpisz ponownie lub zarejestruj sie!\n";
+	{
+		cout << "Bledne dane, wpisz ponownie\n";
+		logowanie();
+	}
 	LekarzePlik.close();
 	peselGlob2 = pesel2;
 	Lekarz l;
