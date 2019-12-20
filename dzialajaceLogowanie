@@ -22,7 +22,6 @@ public:
 class Pacjent : public Osoba
 {
 public:
-	friend class Dane;
 	string haslo;
 	string zarezerwowanyTermin;
 	void wczytajDane();
@@ -34,7 +33,6 @@ public:
 class Lekarz : public Osoba
 {
 public:
-	friend class Dane;
 	bool grafikLekarza[5][14];
 	string haslo;
 	string specjalizacja;
@@ -45,16 +43,6 @@ public:
 	static Lekarz logowanie();
 	void wypiszRecepte();
 	void udzielPoradyInt();
-};
-
-class Dane
-{
-public:
-	friend class Pacjent;
-	friend class Lekarz;
-	//this->imie, this->nazwisko, this->adres, this->pesel, this->haslo
-	vector < Pacjent > ZbiorPacjentow;
-	vector < Lekarz > ZbiorLekarzy;
 };
 
 class KartaChorob
@@ -218,16 +206,14 @@ Pacjent Pacjent::logowanie()
 				cout << "Haslo jest poprawne";
 				Sleep(1000);
 				system("cls");
-				//return p;
-				//trzeba sprawdzic dla jakiego obiektu zostal wisany pesel 
-				//for (
-				// if (pesel1==p.pesel)
-				//Pacjent p;
-				 //return p;
 				break;
 			}
 			else
+			{
 				cout << "Haslo jest niepoprawne!" << endl;
+				Sleep(1000);
+				system("cls");
+			}
 		}
 	}
 
@@ -392,16 +378,14 @@ Lekarz Lekarz::logowanie()
 				cout << "Haslo jest poprawne";
 				Sleep(1000);
 				system("cls");
-				//return p;
-				//trzeba sprawdzic dla jakiego obiektu zostal wisany pesel 
-				//for (
-				// if (pesel1==p.pesel)
-				//Pacjent p;
-				 //return p;
 				break;
 			}
 			else
+			{
 				cout << "Haslo jest niepoprawne!" << endl;
+				Sleep(1000);
+				system("cls");
+			}
 		}
 	}
 
