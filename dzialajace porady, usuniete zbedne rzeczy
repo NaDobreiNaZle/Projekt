@@ -90,40 +90,75 @@ public:
 //FUNKCJE
 void Porada::wyswOdpowiedzi()
 {
-	cout << "1.Nowe odpowiedzi \n 2.Stare odpowiedzi" << endl;
+	cout << "1.Nowe odpowiedzi \n2.Stare odpowiedzi" << endl;
 	int odp;
 	cin >> odp;
-		if (odp == 1)
-		{
+	int i = 0;
+	if (odp == 1)
+	{
+		string nazwa = "internetowe";
+		nazwa += peselGlob;
+		nazwa += ".txt";
+		string tekst;
+			fstream Porady(nazwa.c_str());
+			if (Porady)
+			{
+				while (!Porady.eof())
+				{
+					getline(Porady, tekst);
 
-			fstream Porady;
+					if (!(string::npos == tekst.find("Odpowiedz lekarza: ")))
+						i++;
 
-			string nazwa = "internetowe";
+				}
+				Porady.close();
 
-			nazwa += peselGlob;
-			nazwa += ".txt";
+				if (i > 0)
+				{
+					Porady.open(nazwa.c_str(), ios::app | ios::in);
+					cout << Porady.rdbuf();
+					Porady.close();
+					remove(nazwa.c_str());
+				}
 
-			Porady.open(nazwa.c_str(), ios::app | ios::in);
-			cout << Porady.rdbuf();
-			Porady.close();
-			remove(nazwa.c_str());
-		}
+				else
+					cout << "Brak nowych odpowiedzi" << endl;
+			}
 
-		else if (odp == 2)
-		{
-			fstream starePorady;
+			else
+				cout << "Nie masz oczekujacych odpowiedzi" << endl;
+			
+			
+			
+			
+		
+			
 
-			string nazwa2 = "internetowe";
 
-			nazwa2 += peselGlob;
-			nazwa2 += ".txt";
+		
 
-			starePorady.open(nazwa2.c_str(), ios::app | ios::in);
-			cout << starePorady.rdbuf();
-			starePorady.close();
+	}
 
-		}
-	
+
+
+	else if ( odp ==2)
+
+	{
+		fstream starePorady;
+
+		string nazwa2 = "internetoweS";
+
+		nazwa2 += peselGlob;
+		nazwa2 += ".txt";
+
+		starePorady.open(nazwa2.c_str(), ios::app | ios::in);
+		cout << starePorady.rdbuf();
+		starePorady.close();
+
+	}
+			//fstream Porady;
+			
+
 
 }
 void czyZarezerwowanyTermin(Termin t)
@@ -160,15 +195,7 @@ void Pacjent::wczytajDane()
 	DanePacjenci << "    " << "Imie: " << imie << "     ";
 	DanePacjenci << "Nazwisko: " << nazwisko << "     ";
 	DanePacjenci << "Adres: " << adres << " \n";
-	fstream Porady;
-	string nazwa = "internetowe";
 
-	nazwa += pesel;
-	nazwa += ".txt";
-
-	Porady.open(nazwa.c_str(), ios::app);
-	Porady << imie << " " << nazwisko << " " << pesel << " " << adres << endl;
-	Porady.close();
 
 	DanePacjenci.close();
 	PacjenciPlik.close();
@@ -617,6 +644,7 @@ void Porada :: dodawanie_porady()
 
 	system("cls");
 	fstream Porady;
+
 	fstream starePorady;
 	string nazwa = "internetowe";
 	string nazwa2 = "internetoweS";
@@ -776,7 +804,7 @@ int main()
 			cout << "--------------------------" << endl;
 			cout << "1. Wyswietl swoje dane " << endl;
 			cout << "2. Dodaj porade oczekujaca" << endl;
-			cout << "3. Wyswietl odpowiedzi" << endl;
+			cout << "3. Wyswietl swoje zapytania" << endl;
 			cout << "--------------------------" << endl;
 			cout << "Wybor: ";
 			int nr2;
