@@ -1,0 +1,812 @@
+#include <iostream>
+#include <string>
+#include <windows.h>
+#include <winbase.h>
+#include <assert.h>
+#include <cstdlib>
+#include <fstream>
+#include <limits>
+#undef max
+using namespace std;
+
+string peselGlob;
+string peselGlob2;
+
+//KLASY
+class Osoba
+{
+public:
+	string imie;
+	string nazwisko;
+	string adres;
+	string pesel;
+};
+
+
+class Pacjent : public Osoba
+{
+public:
+	string haslo;
+	string zarezerwowanyTermin;
+	void wczytajDane();
+	void wyswietlDane(string pesel);
+	static Pacjent logowanie();
+	
+
+};
+
+class Lekarz : public Osoba
+{
+public:
+	bool grafikLekarza[5][14];
+	string haslo;
+	string specjalizacja;
+	int godzinaRozpoczeciaPracy;
+	int godzinaZakonczeniaPracy;
+	void wczytajDane();
+	void wyswietlDane(string pesel);
+	static Lekarz logowanie();
+};
+
+
+class KartaChorob
+{
+public:
+	string diagnoza;
+	string szczepienia;
+	string dataOstatniejChoroby;
+	void wyswietlKarteChorob(Pacjent P);
+};
+
+class Termin
+{
+public:
+	string data;
+	int godzina;
+	bool zarezerwowany;
+	void zarezerwujTermin();
+	void wyswietlTerminy();
+	void wyswietlDostLekarzy(string specjalizacja);
+};
+
+class Harmonogram
+{
+public:
+	static void aktualizujGrafik(Lekarz*, int, int);
+	static void wyswietlGrafikLekarza(Lekarz L);
+	void aktualizujPrzyszleTerminy();
+};
+
+
+class Porada
+{
+public:
+	void dodawanie_porady();
+	void wyswPorady(Porada porada1);
+	void wyswOdpowiedzi();
+
+};
+
+//FUNKCJE
+void Porada::wyswOdpowiedzi()
+{
+	cout << "1.Nowe odpowiedzi \n 2.Stare odpowiedzi" << endl;
+	int odp;
+	cin >> odp;
+		if (odp == 1)
+		{
+
+			fstream Porady;
+
+			string nazwa = "internetowe";
+
+			nazwa += peselGlob;
+			nazwa += ".txt";
+
+			Porady.open(nazwa.c_str(), ios::app | ios::in);
+			cout << Porady.rdbuf();
+			Porady.close();
+			remove(nazwa.c_str());
+		}
+
+		else if (odp == 2)
+		{
+			fstream starePorady;
+
+			string nazwa2 = "internetowe";
+
+			nazwa2 += peselGlob;
+			nazwa2 += ".txt";
+
+			starePorady.open(nazwa2.c_str(), ios::app | ios::in);
+			cout << starePorady.rdbuf();
+			starePorady.close();
+
+		}
+	
+
+}
+void czyZarezerwowanyTermin(Termin t)
+{
+	assert(t.zarezerwowany == 1);
+	cout << "zarezerwowany" << endl;
+}
+
+void Pacjent::wczytajDane()
+{
+	
+	
+	fstream DanePacjenci;
+	fstream PacjenciPlik;
+	PacjenciPlik.open("PlikZPacjentami.txt", ios::app);
+	DanePacjenci.open("WszystkieDane.txt", ios::app);
+	cout << "Podaj imie: ";
+	cin.ignore();
+	getline(cin, this->imie);
+	cout << "Podaj nazwisko: ";
+	getline(cin, this->nazwisko);
+	cout << "Podaj swoj adres: ";
+	getline(cin, this->adres);
+	cout << "Podaj pesel: ";
+	getline (cin, pesel);
+
+
+
+	cout << "Podaj haslo: ";
+	cin >> this->haslo;
+	PacjenciPlik << pesel << " ";
+	PacjenciPlik << haslo << "\n";
+	DanePacjenci << pesel << " ";
+	DanePacjenci << "    " << "Imie: " << imie << "     ";
+	DanePacjenci << "Nazwisko: " << nazwisko << "     ";
+	DanePacjenci << "Adres: " << adres << " \n";
+	fstream Porady;
+	string nazwa = "internetowe";
+
+	nazwa += pesel;
+	nazwa += ".txt";
+
+	Porady.open(nazwa.c_str(), ios::app);
+	Porady << imie << " " << nazwisko << " " << pesel << " " << adres << endl;
+	Porady.close();
+
+	DanePacjenci.close();
+	PacjenciPlik.close();
+}
+
+
+Pacjent Pacjent::logowanie()
+{
+
+	string pesel1;
+	cout << "Pesel: " << endl;
+	cin >> pesel1;
+
+	string haslo1;
+
+	bool czyZnaleziono = 0;
+	bool czyDobreHaslo = 0;
+	string ZapisaneHaslo;
+	fstream PacjenciPlik;
+
+	PacjenciPlik.open("PlikZPacjentami.txt");
+	while (!PacjenciPlik.eof())
+	{
+		string temp = "";
+		getline(PacjenciPlik, temp);
+
+		for (int i = 0; i < pesel1.size(); i++)
+		{
+			if (temp[i] == pesel1[i])
+				czyZnaleziono = 1;
+			else
+			{
+				czyZnaleziono = 0;
+				break;
+			}
+		}
+
+		if (czyZnaleziono)
+		{
+			cout << "Haslo: " << endl;
+			cin >> haslo1;
+
+			for (int i = pesel1.size() + 1; i < temp.size(); i++)
+			{
+				ZapisaneHaslo += temp[i];
+			}
+			if (ZapisaneHaslo == haslo1)
+			{
+				cout << "Haslo jest poprawne";
+				Sleep(1000);
+				system("cls");
+				break;
+			}
+			else
+				cout << "Haslo jest niepoprawne!" << endl;
+		}
+	}
+
+	if (PacjenciPlik.eof() && (!czyZnaleziono))
+	{
+		cout << "Bledne dane, wpisz ponownie\n";
+		logowanie();
+	}
+	PacjenciPlik.close();
+	peselGlob = pesel1;
+	Pacjent p;
+	return p;
+}
+
+void Pacjent::wyswietlDane(string pesel)
+{
+	fstream DanePacjenci;
+	DanePacjenci.open("WszystkieDane.txt");
+
+	bool znal = 0;
+	while (!DanePacjenci.eof())
+	{
+		string temp = "";
+		getline(DanePacjenci, temp);
+		for (int i = 0; i < pesel.size(); i++)
+		{
+			if (temp[i] == pesel[i])
+				znal = 1;
+			else
+			{
+				znal = 0;
+				break;
+			}
+		}
+
+		if (znal)
+		{
+			cout << "Pesel: ";
+			for (int i = 0; i < temp.size(); i++)
+
+				cout << temp[i];
+			break;
+			cout << "    ";
+		}
+
+	}
+
+	if (DanePacjenci.eof() && (!znal))
+	{
+		cout << "Name not found!\n";
+	}
+
+	DanePacjenci.close();
+
+}
+
+
+void Lekarz::wczytajDane()
+{
+	fstream DaneLekarze;
+	fstream LekarzePlik;
+	LekarzePlik.open("PlikZLekarzami.txt", ios::app);
+	DaneLekarze.open("WszystkieDaneL.txt", ios::app);
+	cout << "Podaj imie: ";
+	cin.ignore();
+	getline(cin, this->imie);
+	cout << "Podaj nazwisko: ";
+	getline(cin, this->nazwisko);
+	cout << "Podaj swoj adres: ";
+	getline(cin, this->adres);
+	cout << "Podaj pesel: ";
+	cin >> this->pesel;
+	cout << "Podaj haslo: ";
+	cin >> this->haslo;
+	LekarzePlik << pesel << " ";
+	LekarzePlik << haslo << "\n";
+
+	cout << "Podaj swoja specjalizacje lekarska: ";
+	cin >> this->specjalizacja;
+	cout << "Podaj godzine rozpoczecia pracy: ";
+	cin >> this->godzinaRozpoczeciaPracy;
+	cout << "Podaj godzine zakonczenia pracy: ";
+	cin >> this->godzinaZakonczeniaPracy;
+	DaneLekarze << pesel << " ";
+	DaneLekarze << "    " << "Imie: " << imie << "     ";
+	DaneLekarze << "Nazwisko: " << nazwisko << "     ";
+	DaneLekarze << "Adres: " << adres << "     ";
+	DaneLekarze << "Specjalizacja: " << specjalizacja << "     ";
+	DaneLekarze << "Godziny pracy: " << godzinaRozpoczeciaPracy << " - " << godzinaZakonczeniaPracy << " \n";
+	DaneLekarze.close();
+	LekarzePlik.close();
+	for (int i = 0; i < 5; i++)
+	{
+		for (int j = 0; j < 14; j++)
+		{
+			this->grafikLekarza[i][j] = false;
+		}
+	}
+}
+
+
+Lekarz Lekarz::logowanie()
+{
+	string pesel2;
+	cout << "Pesel: " << endl;
+	cin >> pesel2;
+
+	string haslo2;
+
+	bool czyZnaleziono2 = 0;
+	bool czyDobreHaslo2 = 0;
+	string ZapisaneHaslo2;
+	fstream LekarzePlik;
+
+	LekarzePlik.open("PlikZLekarzami.txt");
+	while (!LekarzePlik.eof())
+	{
+		string temp = "";
+		getline(LekarzePlik, temp);
+
+		for (int i = 0; i < pesel2.size(); i++)
+		{
+			if (temp[i] == pesel2[i])
+				czyZnaleziono2 = 1;
+			else
+			{
+				czyZnaleziono2 = 0;
+				break;
+			}
+		}
+
+		if (czyZnaleziono2)
+		{
+			cout << "Haslo: " << endl;
+			cin >> haslo2;
+
+			for (int i = pesel2.size() + 1; i < temp.size(); i++)
+			{
+				ZapisaneHaslo2 += temp[i];
+			}
+			if (ZapisaneHaslo2 == haslo2)
+			{
+				cout << "Haslo jest poprawne";
+				Sleep(1000);
+				system("cls");
+				break;
+			}
+			else
+				cout << "Haslo jest niepoprawne!" << endl;
+		}
+	}
+
+	if (LekarzePlik.eof() && (!czyZnaleziono2))
+	{
+		cout << "Bledne dane, wpisz ponownie\n";
+		logowanie();
+	}
+	
+	LekarzePlik.close();
+	peselGlob2 = pesel2;
+	Lekarz l;
+	return l;
+}
+
+void Lekarz::wyswietlDane(string pesel)
+{
+	fstream DaneLekarze;
+	DaneLekarze.open("WszystkieDaneL.txt");
+	bool znal1 = 0;
+	while (!DaneLekarze.eof())
+	{
+		string temp = "";
+		getline(DaneLekarze, temp);
+		for (int i = 0; i < pesel.size(); i++)
+		{
+			if (temp[i] == pesel[i])
+				znal1 = 1;
+			else
+			{
+				znal1 = 0;
+				break;
+			}
+		}
+
+		if (znal1)
+		{
+			cout << "Pesel: ";
+			for (int i = 0; i < temp.size(); i++)
+
+				cout << temp[i];
+			break;
+			cout << "    ";
+		}
+
+	}
+
+	if (DaneLekarze.eof() && (!znal1))
+	{
+		cout << "Name not found!\n";
+	}
+
+	DaneLekarze.close();
+}
+
+
+void Harmonogram::wyswietlGrafikLekarza(Lekarz L)
+
+{
+	HANDLE kolor;
+	kolor = GetStdHandle(STD_OUTPUT_HANDLE);
+	cout << endl << "Harmonogram lekarza " << L.imie << " " << L.nazwisko << endl;
+	cout << endl << "Poniedzia3ek:" << endl;
+	for (int i = 6; i < 20; i++)
+	{
+		if (L.godzinaRozpoczeciaPracy <= i && L.godzinaZakonczeniaPracy - 1 >= i)
+		{
+			cout << "Godzina " << i;
+			if (L.grafikLekarza[0][i - 6] == false)
+			{
+
+				SetConsoleTextAttribute(kolor, 2);
+				cout << " DOSTEPNY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+			}
+			else
+			{
+				SetConsoleTextAttribute(kolor, 4);
+				cout << " ZAJETY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+			}
+		}
+	}
+
+	cout << endl << "Wtorek:" << endl;
+	for (int i = 6; i < 20; i++)
+	{
+		if (L.godzinaRozpoczeciaPracy <= i && L.godzinaZakonczeniaPracy - 1 >= i)
+		{
+			cout << "Godzina " << i;
+			if (L.grafikLekarza[1][i - 6] == false)
+			{
+				SetConsoleTextAttribute(kolor, 2);
+				cout << " DOSTEPNY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+			}
+			else
+			{
+				SetConsoleTextAttribute(kolor, 4);
+				cout << " ZAJETY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+			}
+		}
+	}
+	cout << endl << "Sroda:" << endl;
+	for (int i = 6; i < 20; i++)
+	{
+		if (L.godzinaRozpoczeciaPracy <= i && L.godzinaZakonczeniaPracy - 1 >= i)
+		{
+			cout << "Godzina " << i;
+			if (L.grafikLekarza[2][i - 6] == false)
+			{
+				SetConsoleTextAttribute(kolor, 2);
+				cout << " DOSTEPNY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+			}
+			else
+			{
+				SetConsoleTextAttribute(kolor, 4);
+				cout << " ZAJETY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+
+			}
+
+		}
+	}
+	cout << endl << "Czwartek:" << endl;
+	for (int i = 6; i < 20; i++)
+	{
+		if (L.godzinaRozpoczeciaPracy <= i && L.godzinaZakonczeniaPracy - 1 >= i)
+		{
+			cout << "Godzina " << i;
+			if (L.grafikLekarza[3][i - 6] == false)
+			{
+				SetConsoleTextAttribute(kolor, 2);
+				cout << " DOSTEPNY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+			}
+			else
+			{
+				SetConsoleTextAttribute(kolor, 4);
+				cout << " ZAJETY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+
+			}
+		}
+	}
+	cout << endl << "Piatek:" << endl;
+	for (int i = 6; i < 20; i++)
+	{
+		if (L.godzinaRozpoczeciaPracy <= i && L.godzinaZakonczeniaPracy - 1 >= i)
+		{
+			cout << "Godzina " << i;
+			if (L.grafikLekarza[4][i - 6] == false)
+			{
+				SetConsoleTextAttribute(kolor, 2);
+				cout << " DOSTEPNY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+			}
+			else
+			{
+				SetConsoleTextAttribute(kolor, 4);
+				cout << " ZAJETY" << endl;
+				SetConsoleTextAttribute(kolor, 7);
+
+			}
+		}
+	}
+}
+
+void Harmonogram::aktualizujGrafik(Lekarz* L, int dzien, int godzina)
+{
+	L->grafikLekarza[dzien - 1][godzina - 6] = true;
+
+
+}
+
+void Porada::wyswPorady(Porada porada1)
+{
+		cout << "Oczekujace zapytania internetowe oraz recepty " << endl;
+
+		system("cls");
+		cout << "ZAPYTANIA INTERNETOWE" << endl;
+		fstream Porady;
+		fstream starePorady;
+		string tresc;
+
+		fstream PacjenciPlik;
+		PacjenciPlik.open("PlikZPacjentami.txt");
+		string slowo;
+	
+		cin.ignore();
+	
+
+		
+		while (PacjenciPlik >> slowo)
+		{
+			string nazwa = "internetowe";
+			PacjenciPlik.ignore(numeric_limits<streamsize>::max(), '\n');
+			nazwa += slowo;
+			nazwa += ".txt";
+			
+		
+
+
+			Porady.open(nazwa.c_str(), ios::in);
+			cout << Porady.rdbuf();
+			Porady.close();
+			Porady.open(nazwa.c_str(), ios::app);
+			cout << "Odpowiedz: " << endl;
+			getline(cin, tresc);
+			cout << "\n";
+			Porady << "Odpowiedz lekarza: " << tresc << endl;
+			Porady.close();
+
+
+			string nazwa2 = "internetoweS";
+			PacjenciPlik.ignore(numeric_limits<streamsize>::max(), '\n');
+			nazwa2 += slowo;
+			nazwa2 += ".txt";
+
+			starePorady.open(nazwa2.c_str(), ios::app);
+			
+			starePorady << "Odpowiedz lekarza: " << tresc << endl;
+			starePorady.close();
+			
+
+
+		}
+
+		PacjenciPlik.close();
+}
+
+
+void Porada :: dodawanie_porady()
+{
+	SYSTEMTIME st;
+	GetSystemTime(&st);
+
+
+	cout << "Dodaj zapytanie internetowe lub recepte oczekujaca" << endl;
+
+	system("cls");
+	fstream Porady;
+	fstream starePorady;
+	string nazwa = "internetowe";
+	string nazwa2 = "internetoweS";
+
+	nazwa += peselGlob;
+	nazwa += ".txt";
+	nazwa2 += peselGlob;
+	nazwa2 += ".txt";
+		
+	Porady.open(nazwa.c_str(), ios::app);
+	starePorady.open(nazwa2.c_str(), ios::app);
+	cout << "DODAWANIE ZAPYTANIA INTERNETOWEGO" << endl;
+	cout << "Podaj tresc: ";
+	string trescZapytania;
+	cin.ignore();
+	getline(cin, trescZapytania);
+	Porady << trescZapytania << "  ";
+	starePorady << trescZapytania << "  ";
+
+	cout << "Data dodania: ";
+	cout << st.wDay << "." << st.wMonth << "." << st.wYear << endl;
+	cout << "Godzina dodania: ";
+
+	cout << st.wHour << ":";
+	if (st.wMinute < 10)
+		cout << "0" << st.wMinute << ":";
+	else
+		cout << st.wMinute <<":";
+	if (st.wSecond < 10)
+		cout << "0" << st.wSecond << endl;
+	else
+		cout << st.wSecond << endl;
+	Porady << "\nData dodania: " <<  st.wDay << "." << st.wMonth << "." << st.wYear << "  ";
+	Porady << "Godzina dodania: " << st.wHour << ":";
+	if (st.wMinute < 10)
+		Porady << "0" << st.wMinute << ":";
+	else
+		Porady << st.wMinute << ":";
+	if (st.wSecond < 10)
+		Porady << "0" << st.wSecond << endl;
+	else
+		Porady << st.wSecond << endl;
+
+
+
+	starePorady << "\nData dodania: " << st.wDay << "." << st.wMonth << "." << st.wYear << "  ";
+	starePorady << "Godzina dodania: " << st.wHour << ":";
+	if (st.wMinute < 10)
+		starePorady << "0" << st.wMinute << ":";
+	else
+		starePorady << st.wMinute << ":";
+	if (st.wSecond < 10)
+		starePorady << "0" << st.wSecond << endl;
+	else
+		starePorady << st.wSecond << endl;
+}
+
+
+
+
+
+//MAIN
+int main()
+{
+	Porada porada;
+
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 3);
+	cout << "\t" << "PRZYCHODNIA LEKARSKA";
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
+	Sleep(1000);
+	system("cls");
+	cout << "WYBIERZ:" << endl;
+	cout << "-------------" << endl;
+	cout << "1. Zarejestruj " << endl;
+	cout << "2. Zaloguj" << endl;
+	cout << "-------------" << endl;
+	cout << "Wybor: ";
+	int w1;
+	cin >> w1;
+	system("cls");
+	int wybor;
+	cout << "JAKO:" << endl;
+	cout << "-------------" << endl;
+	cout << "1. Lekarz " << endl;
+	cout << "2. Pacjent" << endl;
+	cout << "-------------" << endl;
+	cout << "Wybor: ";
+	cin >> wybor;
+	system("cls");
+	Lekarz l;
+	Pacjent p;
+	
+	
+	if (w1 == 1)
+	{
+		if (wybor == 1)
+			l.wczytajDane();
+		else if (wybor == 2)
+			p.wczytajDane();
+	}
+
+
+	switch (wybor)
+	{
+		case 1:
+		{
+			system("cls");
+			cout << endl << "WITAJ LEKARZU";
+			Sleep(1000);
+			system("cls");
+			cout << "---------" << endl;
+			cout << "LOGOWANIE" << endl;
+			cout << "---------" << endl;
+			l.logowanie();
+	
+			cout << "\tMENU" << endl;
+			cout << "-----------------------------" << endl;
+			cout << "1. Wyswietl swoje dane " << endl;
+			cout << "2. Wyswietl porady oczekujace" << endl;
+			cout << "-----------------------------" << endl;
+			cout << "Wybor: ";
+			int nr1;
+			cin >> nr1;
+
+			switch (nr1)
+			{
+				case 1:
+				{
+					cout << "TWOJE DANE" << endl;
+					l.wyswietlDane(peselGlob2);
+					break;
+				}
+				case 2:
+				{
+				system("cls");
+				porada.wyswPorady(porada);
+				break;
+				}
+			}
+			break;
+		}
+
+		case 2:
+		{
+			system("cls");
+			cout << endl << "WITAJ PACJENCIE";
+			Sleep(1000);
+			system("cls");
+
+			cout << "---------" << endl;
+			cout << "LOGOWANIE" << endl;
+			cout << "---------" << endl;
+			p.logowanie();
+
+			system("cls");
+			cout << "\tMENU" << endl;
+			cout << "--------------------------" << endl;
+			cout << "1. Wyswietl swoje dane " << endl;
+			cout << "2. Dodaj porade oczekujaca" << endl;
+			cout << "3. Wyswietl odpowiedzi" << endl;
+			cout << "--------------------------" << endl;
+			cout << "Wybor: ";
+			int nr2;
+			cin >> nr2;
+
+			switch (nr2)
+			{
+				case 1:
+				{
+					cout << "\t" << "TWOJE DANE" << endl;
+					p.wyswietlDane(peselGlob);
+					break;
+				}
+				case 2:
+				{
+					system("cls");
+					porada.dodawanie_porady();
+					break;
+				}
+				case 3:
+				{
+					system("cls");
+					porada.wyswOdpowiedzi();
+				}
+			}
+				break;
+		}
+
+	}
+
+
+
+}
