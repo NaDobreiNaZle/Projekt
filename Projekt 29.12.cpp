@@ -90,7 +90,9 @@ void Porada::wyswOdpowiedzi()
 {
 	cout << "1.Nowe odpowiedzi \n2.Stare odpowiedzi" << endl;
 	int odp;
+	cout << "Wybor: "; 
 	cin >> odp;
+	cout << endl;
 	int i = 0;
 	if (odp == 1)
 	{
@@ -262,6 +264,8 @@ Pacjent Pacjent::logowanie()
 	if (PacjenciPlik.eof() && (!czyZnaleziono))
 	{
 		cout << "Bledne dane, wpisz ponownie\n";
+		Sleep (2000);
+		system("cls");
 		logowanie();
 	}
 	PacjenciPlik.close();
@@ -434,6 +438,8 @@ Lekarz Lekarz::logowanie()
 	if (LekarzePlik.eof() && (!czyZnaleziono2))
 	{
 		cout << "Bledne dane, wpisz ponownie\n";
+		Sleep (2000);
+		system("cls");
 		logowanie();
 	}
 
@@ -777,184 +783,191 @@ int main()
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), 15);
 	Sleep(1000);
 	system("cls");
-	cout << "WYBIERZ:" << endl;
-	cout << "-------------" << endl;
-	cout << "1. Zarejestruj " << endl;
-	cout << "2. Zaloguj" << endl;
-	cout << "-------------" << endl;
-	cout << "Wybor: ";
-	int w1;
-	cin >> w1;
-	system("cls");
-	int wybor;
-	cout << "JAKO:" << endl;
-	cout << "-------------" << endl;
-	cout << "1. Lekarz " << endl;
-	cout << "2. Pacjent" << endl;
-	cout << "-------------" << endl;
-	cout << "Wybor: ";
-	cin >> wybor;
-	system("cls");
-	Lekarz l;
-	Pacjent p;
-
-	if (w1 == 1)
+	int w1=0;
+	while(w1!=3)
 	{
-		if (wybor == 1)
-		{
-			cin.ignore();
-			l.wczytajDane();
-		}
-		else if (wybor == 2)
-		{
-			cin.ignore();
-			p.wczytajDane();
-		}
-
-	}
-
-	int nr = 0;
-
-	switch (wybor)
-	{
-	case 1:
-	{
+		cout << "WYBIERZ:" << endl;
+		cout << "------------------" << endl;
+		cout << "1. Zarejestruj " << endl;
+		cout << "2. Zaloguj" << endl;
+		cout << "3. Zakoncz program" << endl;
+		cout << "------------------" << endl;
+		cout << "Wybor: ";
+		cin >> w1;
 		system("cls");
-		cout << endl << "WITAJ LEKARZU";
-		Sleep(1000);
-		system("cls");
-		cout << "---------" << endl;
-		cout << "LOGOWANIE" << endl;
-		cout << "---------" << endl;
-		l.logowanie();
-
-		while (nr != 4)
+		if (w1!=3)
 		{
-			cout << "\tMENU" << endl;
-			cout << "-----------------------------" << endl;
-			cout << "1. Wyswietl swoje dane " << endl;
-			cout << "2. Wyswietl porady oczekujace" << endl;
-			cout << "3. Edytuj karte pacjenta" << endl;
-			cout << "4. Wyloguj" << endl;
-			cout << "-----------------------------" << endl;
+			int wybor;
+			cout << "JAKO:" << endl;
+			cout << "-------------" << endl;
+			cout << "1. Lekarz " << endl;
+			cout << "2. Pacjent" << endl;
+			cout << "-------------" << endl;
 			cout << "Wybor: ";
-			cin >> nr;
+			cin >> wybor;
 			system("cls");
-			switch (nr)
+			Lekarz l;
+			Pacjent p;
+
+			if (w1 == 1)
+			{
+				if (wybor == 1)
+				{
+					cin.ignore();
+					l.wczytajDane();
+				}
+				else if (wybor == 2)
+				{
+					cin.ignore();
+					p.wczytajDane();
+				}
+
+			}
+
+			int nr = 0;
+
+			switch (wybor)
 			{
 			case 1:
 			{
-				int w = 0;
-				while (w != 1)
-				{
-					cout << "TWOJE DANE" << endl;
-					l.wyswietlDane(peselGlob2);
-					cout << endl << endl << "1. Powrot do menu " << endl;
-					cout << "Wybor: ";
-					cin >> w;
-				}
-				break;
-			}
-			case 2:
-			{
-				porada.wyswPorady(porada);
-				Sleep(1000);
-				break;
-			}
-			case 3:
-			{
-				string pesel;
-				cout << "Podaj pesel pacjenta: ";
-				cin >> pesel;
 				system("cls");
-				kartaChorob.dodajKarteChorob(pesel);
-				Sleep(2000);
-				break;
-			}
-			}
-			system("cls");
-		}
-		cout << "Wylogowano";
-		break;
-	}
-
-	case 2:
-	{
-		system("cls");
-		cout << endl << "WITAJ PACJENCIE";
-		Sleep(1000);
-		system("cls");
-
-		cout << "---------" << endl;
-		cout << "LOGOWANIE" << endl;
-		cout << "---------" << endl;
-		p.logowanie();
-
-		while (nr != 5)
-		{
-			system("cls");
-			cout << "\tMENU" << endl;
-			cout << "--------------------------" << endl;
-			cout << "1. Wyswietl swoje dane " << endl;
-			cout << "2. Dodaj porade oczekujaca" << endl;
-			cout << "3. Wyswietl swoje zapytania" << endl;
-			cout << "4. Wyswietl swoja karte chorob" << endl;
-			cout << "5. Wyloguj" << endl;
-			cout << "--------------------------" << endl;
-			cout << "Wybor: ";
-			cin >> nr;
-			system("cls");
-			switch (nr)
-			{
-			case 1:
-			{
-				int w = 0;
-				while (w != 1)
+				cout << endl << "WITAJ LEKARZU";
+				Sleep(1000);
+				system("cls");
+				cout << "---------" << endl;
+				cout << "LOGOWANIE" << endl;
+				cout << "---------" << endl;
+				l.logowanie();
+		
+				while (nr != 4)
 				{
-					cout << "\t" << "TWOJE DANE" << endl;
-					p.wyswietlDane(peselGlob);
-					cout << endl << endl << "1. Powrot do menu " << endl;
+					cout << "\tMENU" << endl;
+					cout << "-----------------------------" << endl;
+					cout << "1. Wyswietl swoje dane " << endl;
+					cout << "2. Wyswietl porady oczekujace" << endl;
+					cout << "3. Edytuj karte pacjenta" << endl;
+					cout << "4. Wyloguj" << endl;
+					cout << "-----------------------------" << endl;
 					cout << "Wybor: ";
-					cin >> w;
+					cin >> nr;
+					system("cls");
+					switch (nr)
+					{
+					case 1:
+					{
+						int w = 0;
+						while (w != 1)
+						{
+							cout << "\t" << "TWOJE DANE" << endl;
+							l.wyswietlDane(peselGlob2);
+							cout << endl << endl << "1. Powrot do menu " << endl;
+							cout << "Wybor: ";
+							cin >> w;
+						}
+						break;
+					}
+					case 2:
+					{
+						porada.wyswPorady(porada);
+						Sleep(2000);
+						break;
+					}
+					case 3:
+					{
+						string pesel;
+						cout << "Podaj pesel pacjenta: ";
+						cin >> pesel;
+						system("cls");
+						kartaChorob.dodajKarteChorob(pesel);
+						Sleep(2000);
+						break;
+					}
+					}
+					system("cls");
 				}
+				cout << "\t" << "WYLOGOWANO";
 				break;
 			}
+
 			case 2:
 			{
-				
-					porada.dodawanie_porady();
-					Sleep(1000);
-				break;
-			}
-			case 3:
-			{
-				int w = 0;
-				while (w != 1)
+				system("cls");
+				cout << endl << "WITAJ PACJENCIE";
+				Sleep(1000);
+				system("cls");
+
+				cout << "---------" << endl;
+				cout << "LOGOWANIE" << endl;
+				cout << "---------" << endl;
+				p.logowanie();
+
+				while (nr != 5)
 				{
-				porada.wyswOdpowiedzi();
-				cout << endl << endl << "1. Powrot do menu " << endl;
-				cout << "Wybor: ";
-				cin >> w;
-				}
-				break;
-			}
-			case 4:
-			{
-				int w = 0;
-				while (w != 1)
-				{
-					kartaChorob.wyswietlKarteChorob(peselGlob);
-					cout << endl << endl << "1. Powrot do menu " << endl;
+					system("cls");
+					cout << "\tMENU" << endl;
+					cout << "--------------------------------" << endl;
+					cout << "1. Wyswietl swoje dane " << endl;
+					cout << "2. Dodaj porade oczekujaca" << endl;
+					cout << "3. Wyswietl swoje zapytania" << endl;
+					cout << "4. Wyswietl swoja karte chorob" << endl;
+					cout << "5. Wyloguj" << endl;
+					cout << "--------------------------------" << endl;
 					cout << "Wybor: ";
-					cin >> w;
+					cin >> nr;
+					system("cls");
+					switch (nr)
+					{
+					case 1:
+					{
+						int w = 0;
+						while (w != 1)
+						{
+							cout << "\t" << "TWOJE DANE" << endl;
+							p.wyswietlDane(peselGlob);
+							cout << endl << endl << "1. Powrot do menu " << endl;
+							cout << "Wybor: ";
+							cin >> w;
+						}
+						break;
+					}
+					case 2:
+					{
+				
+							porada.dodawanie_porady();
+							Sleep(2000);
+						break;
+					}
+					case 3:
+					{
+						int w = 0;
+						while (w != 1)
+						{
+						porada.wyswOdpowiedzi();
+						cout << endl << endl << "1. Powrot do menu " << endl;
+						cout << "Wybor: ";
+						cin >> w;
+						}
+						break;
+					}
+					case 4:
+					{
+						int w = 0;
+						while (w != 1)
+						{
+							kartaChorob.wyswietlKarteChorob(peselGlob);
+							cout << endl << endl << "1. Powrot do menu " << endl;
+							cout << "Wybor: ";
+							cin >> w;
+						}
+						break;
+					}
+					}
+					system("cls");
 				}
+				cout << "\t" << "WYLOGOWANO";
 				break;
 			}
 			}
-			system("cls");
 		}
-		cout << "Wylogowano";
-		break;
-	}
 	}
 }
