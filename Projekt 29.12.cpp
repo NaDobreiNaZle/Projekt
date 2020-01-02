@@ -745,7 +745,7 @@ void KartaChorob::dodajKarteChorob(string pesel)
 
 	cout << "Data ostatniej wizyty: ";
 	cout << st.wDay << "." << st.wMonth << "." << st.wYear << endl;
-	KartyChorob << "Data ostatniej wizyty" << st.wDay << "." << st.wMonth << "." << st.wYear << " " << "\n";
+	KartyChorob << "Data ostatniej wizyty: " << st.wDay << "." << st.wMonth << "." << st.wYear << " " << "\n";
 }
 
 void KartaChorob::wyswietlKarteChorob(string pesel)
