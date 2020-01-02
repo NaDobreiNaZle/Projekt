@@ -786,40 +786,6 @@ void KartaChorob::wyswietlKarteChorob(string pesel)
 	KartyChorob.open(nazwa.c_str(), ios::in);
 	cout << KartyChorob.rdbuf();
 	KartyChorob.close();
-	/*string temp = "";
-	int l=0;
-	bool t=0;
-	int i;
-	getline(KartyChorob, temp);
-	for (i; i < temp.size(); i++)
-	{
-		if(temp[i]==32 && temp[i+1]==32)
-		{
-			l++;
-			t=0;
-		}
-		if(l==0 && t==0)
-		{
-			cout<<endl<<"Pesel: ";
-			t=1;
-		}
-		if(l==1 && t==0)
-		{
-			cout<<endl<<"Diagnoza: ";
-			t=1;
-		}
-		if(l==2 && t==0)
-		{
-			cout<<endl<<"Szczepienia: ";
-			t=1;
-		}
-		if(l==3 && t==0)
-		{
-			cout<<endl<<"Data ostatniej wizyty: ";
-			t=1;
-		}
-		cout << temp[i];
-	}*/
 }
 
 
@@ -1011,9 +977,5 @@ int main()
 				cout<<"Wylogowano";
 				break;
 			}
-
 	}
-
-
-
 }
