@@ -30,7 +30,7 @@ public:
 	void wczytajDane();
 	void wyswietlDane(string pesel);
 	static Pacjent logowanie();
-	
+
 
 };
 
@@ -98,49 +98,56 @@ void Porada::wyswOdpowiedzi()
 		nazwa += peselGlob;
 		nazwa += ".txt";
 		string tekst;
-			fstream Porady(nazwa.c_str());
-			if (Porady)
+		fstream Porady(nazwa.c_str());
+		if (Porady)
+		{
+			while (!Porady.eof())
 			{
-				while (!Porady.eof())
-				{
-					getline(Porady, tekst);
+				getline(Porady, tekst);
 
-					if (!(string::npos == tekst.find("Odpowiedz lekarza: ")))
-						i++;
+				if (!(string::npos == tekst.find("Odpowiedz lekarza: ")))
+					i++;
 
-				}
+			}
+			Porady.close();
+
+			if (i > 0)
+			{
+				Porady.open(nazwa.c_str(), ios::app | ios::in);
+				cout << Porady.rdbuf();
 				Porady.close();
-
-				if (i > 0)
-				{
-					Porady.open(nazwa.c_str(), ios::app | ios::in);
-					cout << Porady.rdbuf();
-					Porady.close();
-					remove(nazwa.c_str());
-				}
-
-				else
-					cout << "Brak nowych odpowiedzi" << endl;
+				remove(nazwa.c_str());
 			}
 
 			else
-				cout << "Nie masz oczekujacych odpowiedzi" << endl;
+				cout << "Brak nowych odpowiedzi" << endl;
+		}
+
+		else
+			cout << "Nie masz oczekujacych odpowiedzi" << endl;
 	}
 
-	else if ( odp ==2)
+	else if (odp == 2)
 	{
-		fstream starePorady;
-
 		string nazwa2 = "internetoweS";
 
 		nazwa2 += peselGlob;
 		nazwa2 += ".txt";
+		fstream starePorady(nazwa2.c_str());
 
-		starePorady.open(nazwa2.c_str(), ios::app | ios::in);
-		cout << starePorady.rdbuf();
-		starePorady.close();
+		
+
+		
+		if (starePorady)
+		{
+			starePorady.open(nazwa2.c_str(), ios::app | ios::in);
+			cout << starePorady.rdbuf();
+			starePorady.close();
+		}
+		else
+			cout << "Brak zapytan" << endl;
 	}
-			//fstream Porady;
+	//fstream Porady;
 }
 
 void czyZarezerwowanyTermin(Termin t)
@@ -150,15 +157,15 @@ void czyZarezerwowanyTermin(Termin t)
 }
 
 void Pacjent::wczytajDane()
-{	
+{
 	fstream DanePacjenci;
 	fstream PacjenciPlik;
 	PacjenciPlik.open("PlikZPacjentami.txt", ios::app | ios::in);
 	DanePacjenci.open("WszystkieDane.txt", ios::app);
-	
+
 	cout << "Podaj pesel: ";
-	
-	getline (cin, pesel);
+
+	getline(cin, pesel);
 	string tekst;
 	int i = 0;
 	while (!PacjenciPlik.eof())
@@ -166,20 +173,20 @@ void Pacjent::wczytajDane()
 		getline(PacjenciPlik, tekst);
 
 		if (!(string::npos == tekst.find(pesel)))
-			i=1;
-		
+			i = 1;
+
 	}
 	PacjenciPlik.close();
 
-	if (i ==1)
+	if (i == 1)
 	{
 		cout << "Konto o takim peselu juz istnieje. Prawdopodobnie wpisales bledny pesel. Zarejestruj sie ponownie." << endl;
-			Pacjent:: wczytajDane();
+		Pacjent::wczytajDane();
 	}
 	else
 	{
 		PacjenciPlik.open("PlikZPacjentami.txt", ios::app);
-		
+
 		cout << "Podaj imie: ";
 		getline(cin, this->imie);
 		cout << "Podaj nazwisko: ";
@@ -429,7 +436,7 @@ Lekarz Lekarz::logowanie()
 		cout << "Bledne dane, wpisz ponownie\n";
 		logowanie();
 	}
-	
+
 	LekarzePlik.close();
 	peselGlob2 = pesel2;
 	Lekarz l;
@@ -594,53 +601,53 @@ void Harmonogram::aktualizujGrafik(Lekarz* L, int dzien, int godzina)
 
 void Porada::wyswPorady(Porada porada1)
 {
-		cout << "Oczekujace zapytania internetowe oraz recepty " << endl;
+	cout << "Oczekujace zapytania internetowe oraz recepty " << endl;
 
-		system("cls");
-		cout << "ZAPYTANIA INTERNETOWE" << endl;
-		fstream Porady;
-		fstream starePorady;
-		string tresc;
+	system("cls");
+	cout << "ZAPYTANIA INTERNETOWE" << endl;
+	fstream Porady;
+	fstream starePorady;
+	string tresc;
 
-		fstream PacjenciPlik;
-		PacjenciPlik.open("PlikZPacjentami.txt");
-		string slowo;
-	
-		cin.ignore();
-	
-		while (PacjenciPlik >> slowo)
-		{
-			string nazwa = "internetowe";
-			PacjenciPlik.ignore(numeric_limits<streamsize>::max(), '\n');
-			nazwa += slowo;
-			nazwa += ".txt";
-			
-			Porady.open(nazwa.c_str(), ios::in);
-			cout << Porady.rdbuf();
-			Porady.close();
-			Porady.open(nazwa.c_str(), ios::app);
-			cout << "Odpowiedz: " << endl;
-			getline(cin, tresc);
-			cout << "\n";
-			Porady << "Odpowiedz lekarza: " << tresc << endl;
-			Porady.close();
+	fstream PacjenciPlik;
+	PacjenciPlik.open("PlikZPacjentami.txt");
+	string slowo;
 
-			string nazwa2 = "internetoweS";
-			PacjenciPlik.ignore(numeric_limits<streamsize>::max(), '\n');
-			nazwa2 += slowo;
-			nazwa2 += ".txt";
-			
-			starePorady.open(nazwa2.c_str(), ios::app);
-			
-			starePorady << "Odpowiedz lekarza: " << tresc << endl;
-			starePorady.close();
-		}
+	cin.ignore();
 
-		PacjenciPlik.close();
+	while (PacjenciPlik >> slowo)
+	{
+		string nazwa = "internetowe";
+		PacjenciPlik.ignore(numeric_limits<streamsize>::max(), '\n');
+		nazwa += slowo;
+		nazwa += ".txt";
+
+		Porady.open(nazwa.c_str(), ios::in);
+		cout << Porady.rdbuf();
+		Porady.close();
+		Porady.open(nazwa.c_str(), ios::app);
+		cout << "Odpowiedz: " << endl;
+		getline(cin, tresc);
+		cout << "\n";
+		Porady << "Odpowiedz lekarza: " << tresc << endl;
+		Porady.close();
+
+		string nazwa2 = "internetoweS";
+		PacjenciPlik.ignore(numeric_limits<streamsize>::max(), '\n');
+		nazwa2 += slowo;
+		nazwa2 += ".txt";
+
+		starePorady.open(nazwa2.c_str(), ios::app);
+
+		starePorady << "Odpowiedz lekarza: " << tresc << endl;
+		starePorady.close();
+	}
+
+	PacjenciPlik.close();
 }
 
 
-void Porada :: dodawanie_porady()
+void Porada::dodawanie_porady()
 {
 	SYSTEMTIME st;
 	GetSystemTime(&st);
@@ -658,7 +665,7 @@ void Porada :: dodawanie_porady()
 	nazwa += ".txt";
 	nazwa2 += peselGlob;
 	nazwa2 += ".txt";
-		
+
 	Porady.open(nazwa.c_str(), ios::app);
 	starePorady.open(nazwa2.c_str(), ios::app);
 	cout << "DODAWANIE ZAPYTANIA INTERNETOWEGO" << endl;
@@ -677,12 +684,12 @@ void Porada :: dodawanie_porady()
 	if (st.wMinute < 10)
 		cout << "0" << st.wMinute << ":";
 	else
-		cout << st.wMinute <<":";
+		cout << st.wMinute << ":";
 	if (st.wSecond < 10)
 		cout << "0" << st.wSecond << endl;
 	else
 		cout << st.wSecond << endl;
-	Porady << "\nData dodania: " <<  st.wDay << "." << st.wMonth << "." << st.wYear << "  ";
+	Porady << "\nData dodania: " << st.wDay << "." << st.wMonth << "." << st.wYear << "  ";
 	Porady << "Godzina dodania: " << st.wHour << ":";
 	if (st.wMinute < 10)
 		Porady << "0" << st.wMinute << ":";
@@ -715,7 +722,7 @@ void KartaChorob::dodajKarteChorob(string pesel)
 
 	nazwa += pesel;
 	nazwa += ".txt";
-		
+
 	KartyChorob.open(nazwa.c_str(), ios::app);
 	cout << "EDYTOWANIE KARTY CHOROB" << endl;
 	string diagnoza;
@@ -725,26 +732,33 @@ void KartaChorob::dodajKarteChorob(string pesel)
 	KartyChorob << "Pesel: " << pesel << "  ";
 	cout << "Podaj diagnoze: ";
 	getline(cin, diagnoza);
-	KartyChorob << "Diagnoza: "<< diagnoza << "  ";
-	cout<< "Podaj wykonane szczepienia: ";
+	KartyChorob << "Diagnoza: " << diagnoza << "  ";
+	cout << "Podaj wykonane szczepienia: ";
 	getline(cin, szczepienia);
 	KartyChorob << "Szczepienia: " << szczepienia << "  ";
-	
+
 	cout << "Data ostatniej wizyty: ";
 	cout << st.wDay << "." << st.wMonth << "." << st.wYear << endl;
-	KartyChorob << "Data ostatniej wizyty" << st.wDay << "." << st.wMonth << "." << st.wYear << " "<<"\n";
+	KartyChorob << "Data ostatniej wizyty" << st.wDay << "." << st.wMonth << "." << st.wYear << " " << "\n";
 }
 
 void KartaChorob::wyswietlKarteChorob(string pesel)
 {
 	system("cls");
-	cout << "KARTA CHOROB" <<endl;
-	fstream KartyChorob;
-	
-	string nazwa= "kartyChorob" +pesel + ".txt";
-	KartyChorob.open(nazwa.c_str(), ios::in);
-	cout << KartyChorob.rdbuf();
-	KartyChorob.close();
+	string nazwa = "kartyChorob" + pesel + ".txt";
+	cout << "KARTA CHOROB" << endl;
+	fstream KartyChorob(nazwa.c_str());
+
+
+	if (KartyChorob)
+	{
+		KartyChorob.open(nazwa.c_str(), ios::in);
+		cout << KartyChorob.rdbuf();
+		KartyChorob.close();
+	}
+
+	else
+		cout << "Karta chorob jest obecnie pusta" << endl;
 }
 
 
@@ -783,7 +797,7 @@ int main()
 	system("cls");
 	Lekarz l;
 	Pacjent p;
-	
+
 	if (w1 == 1)
 	{
 		if (wybor == 1)
@@ -796,144 +810,151 @@ int main()
 			cin.ignore();
 			p.wczytajDane();
 		}
-		
+
 	}
 
-	int nr=0;
+	int nr = 0;
 
 	switch (wybor)
 	{
-		case 1:
+	case 1:
+	{
+		system("cls");
+		cout << endl << "WITAJ LEKARZU";
+		Sleep(1000);
+		system("cls");
+		cout << "---------" << endl;
+		cout << "LOGOWANIE" << endl;
+		cout << "---------" << endl;
+		l.logowanie();
+
+		while (nr != 4)
 		{
+			cout << "\tMENU" << endl;
+			cout << "-----------------------------" << endl;
+			cout << "1. Wyswietl swoje dane " << endl;
+			cout << "2. Wyswietl porady oczekujace" << endl;
+			cout << "3. Edytuj karte pacjenta" << endl;
+			cout << "4. Wyloguj" << endl;
+			cout << "-----------------------------" << endl;
+			cout << "Wybor: ";
+			cin >> nr;
 			system("cls");
-			cout << endl << "WITAJ LEKARZU";
-			Sleep(1000);
-			system("cls");
-			cout << "---------" << endl;
-			cout << "LOGOWANIE" << endl;
-			cout << "---------" << endl;
-			l.logowanie();
-	
-			while(nr!=4)
+			switch (nr)
 			{
-				cout << "\tMENU" << endl;
-				cout << "-----------------------------" << endl;
-				cout << "1. Wyswietl swoje dane " << endl;
-				cout << "2. Wyswietl porady oczekujace" << endl;
-				cout << "3. Edytuj karte pacjenta" << endl;
-				cout << "4. Wyloguj" << endl;
-				cout << "-----------------------------" << endl;
-				cout << "Wybor: ";
-				cin >> nr;
-				system("cls");
-				switch (nr)
-				{
-					case 1:
-					{
-						int w=0;
-						while(w!=1)
-						{
-							cout << "TWOJE DANE" << endl;
-							l.wyswietlDane(peselGlob2);
-							cout<<endl<<endl<<"1. Powrot do menu "<<endl;
-							cout<<"Wybor: ";
-							cin>>w;
-						}
-						break;
-					}
-					case 2:
-					{
-						porada.wyswPorady(porada);
-						Sleep(1000);
-						break;
-					}
-					case 3:
-					{
-						string pesel;
-						cout<<"Podaj pesel pacjenta: ";
-						cin>>pesel;
-						system("cls");
-						kartaChorob.dodajKarteChorob(pesel);
-						Sleep(2000);
-						break;
-					}
-				}
-				system("cls");
-			}
-			cout<<"Wylogowano";
-			break;
-		}
-
-		case 2:
-		{
-			system("cls");
-			cout << endl << "WITAJ PACJENCIE";
-			Sleep(1000);
-			system("cls");
-
-			cout << "---------" << endl;
-			cout << "LOGOWANIE" << endl;
-			cout << "---------" << endl;
-			p.logowanie();
-
-			while(nr!=5)
+			case 1:
 			{
-				system("cls");
-				cout << "\tMENU" << endl;
-				cout << "--------------------------" << endl;
-				cout << "1. Wyswietl swoje dane " << endl;
-				cout << "2. Dodaj porade oczekujaca" << endl;
-				cout << "3. Wyswietl swoje zapytania" << endl;
-				cout << "4. Wyswietl swoja karte chorob" << endl;
-				cout << "5. Wyloguj"<<endl;
-				cout << "--------------------------" << endl;
-				cout << "Wybor: ";
-				cin >> nr;
-				system("cls");
-				switch (nr)
+				int w = 0;
+				while (w != 1)
 				{
-					case 1:
-					{
-						int w=0;
-						while(w!=1)
-						{
-							cout << "\t" << "TWOJE DANE" << endl;
-							p.wyswietlDane(peselGlob);
-							cout<<endl<<endl<<"1. Powrot do menu "<<endl;
-							cout<<"Wybor: ";
-							cin>>w;
-						}
-						break;
-					}
-					case 2:
-					{
-						porada.dodawanie_porady();
-						Sleep(1000);
-						break;
-					}
-					case 3:
-					{
-						porada.wyswOdpowiedzi();
-						Sleep(1000);
-						break;
-					}
-					case 4:
-					{
-						int w=0;
-						while(w!=1)
-						{
-							kartaChorob.wyswietlKarteChorob(peselGlob);
-							cout<<endl<<endl<<"1. Powrot do menu "<<endl;
-							cout<<"Wybor: ";
-							cin>>w;
-						}
-						break;
-					}
+					cout << "TWOJE DANE" << endl;
+					l.wyswietlDane(peselGlob2);
+					cout << endl << endl << "1. Powrot do menu " << endl;
+					cout << "Wybor: ";
+					cin >> w;
 				}
-				system("cls");
-			}
-				cout<<"Wylogowano";
 				break;
 			}
+			case 2:
+			{
+				porada.wyswPorady(porada);
+				Sleep(1000);
+				break;
+			}
+			case 3:
+			{
+				string pesel;
+				cout << "Podaj pesel pacjenta: ";
+				cin >> pesel;
+				system("cls");
+				kartaChorob.dodajKarteChorob(pesel);
+				Sleep(2000);
+				break;
+			}
+			}
+			system("cls");
+		}
+		cout << "Wylogowano";
+		break;
+	}
+
+	case 2:
+	{
+		system("cls");
+		cout << endl << "WITAJ PACJENCIE";
+		Sleep(1000);
+		system("cls");
+
+		cout << "---------" << endl;
+		cout << "LOGOWANIE" << endl;
+		cout << "---------" << endl;
+		p.logowanie();
+
+		while (nr != 5)
+		{
+			system("cls");
+			cout << "\tMENU" << endl;
+			cout << "--------------------------" << endl;
+			cout << "1. Wyswietl swoje dane " << endl;
+			cout << "2. Dodaj porade oczekujaca" << endl;
+			cout << "3. Wyswietl swoje zapytania" << endl;
+			cout << "4. Wyswietl swoja karte chorob" << endl;
+			cout << "5. Wyloguj" << endl;
+			cout << "--------------------------" << endl;
+			cout << "Wybor: ";
+			cin >> nr;
+			system("cls");
+			switch (nr)
+			{
+			case 1:
+			{
+				int w = 0;
+				while (w != 1)
+				{
+					cout << "\t" << "TWOJE DANE" << endl;
+					p.wyswietlDane(peselGlob);
+					cout << endl << endl << "1. Powrot do menu " << endl;
+					cout << "Wybor: ";
+					cin >> w;
+				}
+				break;
+			}
+			case 2:
+			{
+				
+					porada.dodawanie_porady();
+					Sleep(1000);
+				break;
+			}
+			case 3:
+			{
+				int w = 0;
+				while (w != 1)
+				{
+				porada.wyswOdpowiedzi();
+				cout << endl << endl << "1. Powrot do menu " << endl;
+				cout << "Wybor: ";
+				cin >> w;
+				}
+				break;
+			}
+			case 4:
+			{
+				int w = 0;
+				while (w != 1)
+				{
+					kartaChorob.wyswietlKarteChorob(peselGlob);
+					cout << endl << endl << "1. Powrot do menu " << endl;
+					cout << "Wybor: ";
+					cin >> w;
+				}
+				break;
+			}
+			}
+			system("cls");
+		}
+		cout << "Wylogowano";
+		break;
+	}
 	}
 }
