@@ -125,22 +125,9 @@ void Porada::wyswOdpowiedzi()
 
 			else
 				cout << "Nie masz oczekujacych odpowiedzi" << endl;
-			
-			
-			
-			
-		
-			
-
-
-		
-
 	}
 
-
-
 	else if ( odp ==2)
-
 	{
 		fstream starePorady;
 
@@ -152,12 +139,8 @@ void Porada::wyswOdpowiedzi()
 		starePorady.open(nazwa2.c_str(), ios::app | ios::in);
 		cout << starePorady.rdbuf();
 		starePorady.close();
-
 	}
 			//fstream Porady;
-			
-
-
 }
 
 void czyZarezerwowanyTermin(Termin t)
@@ -167,9 +150,7 @@ void czyZarezerwowanyTermin(Termin t)
 }
 
 void Pacjent::wczytajDane()
-{
-	
-	
+{	
 	fstream DanePacjenci;
 	fstream PacjenciPlik;
 	PacjenciPlik.open("PlikZPacjentami.txt", ios::app | ios::in);
@@ -214,7 +195,6 @@ void Pacjent::wczytajDane()
 		DanePacjenci << "Nazwisko: " << nazwisko << "     ";
 		DanePacjenci << "Adres: " << adres << " \n";
 
-
 		DanePacjenci.close();
 		PacjenciPlik.close();
 	}
@@ -223,7 +203,6 @@ void Pacjent::wczytajDane()
 
 Pacjent Pacjent::logowanie()
 {
-
 	string pesel1;
 	cout << "Pesel: " << endl;
 	cin >> pesel1;
@@ -361,8 +340,6 @@ void Lekarz::wczytajDane()
 		getline(cin, this->nazwisko);
 		cout << "Podaj swoj adres: ";
 		getline(cin, this->adres);
-
-		
 
 		cout << "Podaj swoja specjalizacje lekarska: ";
 		cin >> this->specjalizacja;
@@ -565,9 +542,7 @@ void Harmonogram::wyswietlGrafikLekarza(Lekarz L)
 				SetConsoleTextAttribute(kolor, 4);
 				cout << " ZAJETY" << endl;
 				SetConsoleTextAttribute(kolor, 7);
-
 			}
-
 		}
 	}
 	cout << endl << "Czwartek:" << endl;
@@ -587,7 +562,6 @@ void Harmonogram::wyswietlGrafikLekarza(Lekarz L)
 				SetConsoleTextAttribute(kolor, 4);
 				cout << " ZAJETY" << endl;
 				SetConsoleTextAttribute(kolor, 7);
-
 			}
 		}
 	}
@@ -608,7 +582,6 @@ void Harmonogram::wyswietlGrafikLekarza(Lekarz L)
 				SetConsoleTextAttribute(kolor, 4);
 				cout << " ZAJETY" << endl;
 				SetConsoleTextAttribute(kolor, 7);
-
 			}
 		}
 	}
@@ -617,8 +590,6 @@ void Harmonogram::wyswietlGrafikLekarza(Lekarz L)
 void Harmonogram::aktualizujGrafik(Lekarz* L, int dzien, int godzina)
 {
 	L->grafikLekarza[dzien - 1][godzina - 6] = true;
-
-
 }
 
 void Porada::wyswPorady(Porada porada1)
@@ -637,8 +608,6 @@ void Porada::wyswPorady(Porada porada1)
 	
 		cin.ignore();
 	
-
-		
 		while (PacjenciPlik >> slowo)
 		{
 			string nazwa = "internetowe";
@@ -646,9 +615,6 @@ void Porada::wyswPorady(Porada porada1)
 			nazwa += slowo;
 			nazwa += ".txt";
 			
-		
-
-
 			Porady.open(nazwa.c_str(), ios::in);
 			cout << Porady.rdbuf();
 			Porady.close();
@@ -659,19 +625,15 @@ void Porada::wyswPorady(Porada porada1)
 			Porady << "Odpowiedz lekarza: " << tresc << endl;
 			Porady.close();
 
-
 			string nazwa2 = "internetoweS";
 			PacjenciPlik.ignore(numeric_limits<streamsize>::max(), '\n');
 			nazwa2 += slowo;
 			nazwa2 += ".txt";
-
+			
 			starePorady.open(nazwa2.c_str(), ios::app);
 			
 			starePorady << "Odpowiedz lekarza: " << tresc << endl;
 			starePorady.close();
-			
-
-
 		}
 
 		PacjenciPlik.close();
@@ -682,7 +644,6 @@ void Porada :: dodawanie_porady()
 {
 	SYSTEMTIME st;
 	GetSystemTime(&st);
-
 
 	cout << "Dodaj zapytanie internetowe lub recepte oczekujaca" << endl;
 
@@ -731,8 +692,6 @@ void Porada :: dodawanie_porady()
 		Porady << "0" << st.wSecond << endl;
 	else
 		Porady << st.wSecond << endl;
-
-
 
 	starePorady << "\nData dodania: " << st.wDay << "." << st.wMonth << "." << st.wYear << "  ";
 	starePorady << "Godzina dodania: " << st.wHour << ":";
@@ -824,7 +783,6 @@ int main()
 	system("cls");
 	Lekarz l;
 	Pacjent p;
-	
 	
 	if (w1 == 1)
 	{
