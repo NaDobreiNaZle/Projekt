@@ -1,0 +1,15 @@
+731930382     Imie: Artur     Nazwisko: Ham     Adres: wwa     Specjalizacja: kon     Godziny pracy: 7 - 14 
+111     Imie: dasd     Nazwisko: asdas     Adres: dasd     Specjalizacja: asdas     Godziny pracy: 11 - 15 
+6999     Imie: monika     Nazwisko: kot     Adres: kot     Specjalizacja: kot     Godziny pracy: 11 - 14 
+124     Imie: Alex     Nazwisko: Ferguson     Adres: WWA     Specjalizacja: robot     Godziny pracy: 6 - 15 
+567     Imie: Ania     Nazwisko: kot     Adres: kot     Specjalizacja: kot     Godziny pracy: 4 - 13 
+333     Imie: adam     Nazwisko: kot     Adres: kot     Specjalizacja: kod     Godziny pracy: 7 - 15 
+696969     Imie: Doktor     Nazwisko: Wilk     Adres: KRK     Specjalizacja: dentysta     Godziny pracy: 8 - 17 
+6969     Imie: Doktor     Nazwisko: Wilk     Adres: KRK     Specjalizacja: dentysta     Godziny pracy: 8 - 16 
+555     Imie: das     Nazwisko: das     Adres: das     Specjalizacja: dsa     Godziny pracy: 6 - 15 
+4343     Imie: 4343     Nazwisko: 4343     Adres: 4343     Specjalizacja: dentysta     Godziny pracy: 8 - 18 
+333     Imie: ddd     Nazwisko: ddd     Adres: ddd     Specjalizacja: d     Godziny pracy: 10 - 19 
+123     Imie: 123     Nazwisko: 123     Adres:      Specjalizacja: asa     Godziny pracy: 11 - 18 
+6969     Imie: Doktor     Nazwisko: Wilk     Adres: krk     Specjalizacja: dentysta     Godziny pracy: 10 - 18 
+555     Imie: AA     Nazwisko: AA     Adres: AA     Specjalizacja: AA     Godziny pracy: 11 - 15 
+731     Imie: aRTUR     Nazwisko: HAM     Adres: SS     Specjalizacja: dentysta     Godziny pracy: 12 - 16 

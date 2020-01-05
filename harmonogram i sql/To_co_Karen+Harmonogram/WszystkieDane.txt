@@ -1,0 +1,6 @@
+731930381     Imie: Artur     Nazwisko: Hamerski     Adres: Krakow 
+111     Imie: aaa     Nazwisko: bb     Adres: cc 
+777     Imie: kot     Nazwisko: adrian     Adres: KRK 
+998     Imie: kot     Nazwisko: kot     Adres: kot 
+321321     Imie: Artur     Nazwisko: kon     Adres: krk 
+111     Imie: aaa     Nazwisko: aa     Adres: aa 

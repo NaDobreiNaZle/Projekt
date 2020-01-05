@@ -1,0 +1,39 @@
+# depslib dependency file v1.0
+1577661667 source:c:\users\arturek\desktop\c\to_co_karen+harmonogram\main.cpp
+	<iostream>
+	<string>
+	<vector>
+	<windows.h>
+	<winbase.h>
+	<assert.h>
+	<cstdlib>
+	<fstream>
+	<limits>
+	<mysql.h>
+	<sstream>
+	<stdio.h>
+	<string>
+
+1577510354 c:\users\arturek\desktop\bibliotekamysql\mysql\mysqlheaders\mysqlheaders\mysql.h
+	<sys/types.h>
+	<winsock.h>
+	"mysql_com.h"
+	"mysql_time.h"
+	"mysql_version.h"
+	"typelib.h"
+	"my_list.h"
+	"my_alloc.h"
+
+1577510354 c:\users\arturek\desktop\bibliotekamysql\mysql\mysqlheaders\mysqlheaders\mysql_com.h
+
+1577510354 c:\users\arturek\desktop\bibliotekamysql\mysql\mysqlheaders\mysqlheaders\mysql_time.h
+
+1577510354 c:\users\arturek\desktop\bibliotekamysql\mysql\mysqlheaders\mysqlheaders\mysql_version.h
+	<custom_conf.h>
+
+1577510354 c:\users\arturek\desktop\bibliotekamysql\mysql\mysqlheaders\mysqlheaders\typelib.h
+
+1577510354 c:\users\arturek\desktop\bibliotekamysql\mysql\mysqlheaders\mysqlheaders\my_list.h
+
+1577510354 c:\users\arturek\desktop\bibliotekamysql\mysql\mysqlheaders\mysqlheaders\my_alloc.h
+
