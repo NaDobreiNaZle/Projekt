@@ -521,12 +521,12 @@ void Pacjent::wczytajDane()			//wczytanie danych pacjenta
 
 	cout << "Podaj pesel: ";
 
-	getline(cin, pesel);						//wpisanie peselu pacjenta
+	getline(cin, pesel);						//pobranie peselu pacjenta
 	string tekst;
 	int i = 0;
 	while (!Hasla.eof())
 	{
-		getline(Hasla, tekst);					//wpisanie hasla
+		getline(Hasla, tekst);					//pobranie hasla
 
 		if (!(string::npos == tekst.find(pesel)))		//jesli konto o danym peselu istnieje
 			i = 1;
@@ -607,12 +607,12 @@ void Lekarz::wczytajDane(Lekarz l)		//wczytanie danych lekarza
 	Hasla.open("PlikZHaslami.txt", ios::app | ios::in);		//plik z loginem (peselem) i haslem
 	Dane.open("Dane.txt", ios::app);				//plik z danymi
 	cout << "Podaj pesel: ";
-	getline(cin, pesel);				//wpisanie peselu
+	getline(cin, pesel);				//pobranie peselu
 	string tekst;
 	int i = 0;
 	while (!Hasla.eof())
 	{
-		getline(Hasla, tekst);			//wpisanie hasla
+		getline(Hasla, tekst);			//pobranie hasla
 
 		if (!(string::npos == tekst.find(pesel)))		//jesli konto o danym peselu istnieje
 			i = 1;
