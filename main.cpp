@@ -1,4 +1,4 @@
-#include <iostream>
+#include <iostream>			//biblioteki uzywane w programie
 #include <string>
 #include <vector>
 #include <windows.h>
@@ -16,7 +16,7 @@
 #undef max
 using namespace std;
 
-string peselGlob;
+string peselGlob;		//zmienna pesel widziana globalnie
 
 ///////////////////////////////////////////////MOJE FUNKCJE OD OBSLUGI SQL KTORE POZNIEJ SPAKUJE DO JEDNEJ BIBLIOTEKI ZEBY SYFU NIE ROBIC///////////////////////////////////////////////////////////
 
@@ -334,13 +334,12 @@ string wyswietlzbazypacjentow(string pesel, string co)
     return odp;
 }
 
-///////////////////////////////////////////////BEZPANSKIE FUNKCJE DO ROZWINIECIA I PRZYGARNIECIA PRZEZ KOGOS///////////////////////////////////////////////////////////
 
 
 
 
+//////////////////////////////////////////////////////////KLASY///////////////////////////////////////////////////////////////////////
 
-//KLASY
 class Osoba
 {
 public:
@@ -408,13 +407,18 @@ public:
 };
 
 
+Lekarz l;			//obiekt lekarza i pacjenta
+Pacjent p;
 
 
 
-//FUNKCJE
-void Osoba::logowanie()				//logowanie
+
+///////////////////////////////////////////////////////////FUNKCJE/////////////////////////////////////////////////////////////////////
+
+
+void Osoba::logowanie(string lekarzczypacjent)			//logowanie
 {
-	cout << "Pesel: " << endl;		
+	cout << "Pesel: " << endl;
 	cin >> pesel;				//podanie swojego peselu
 
 	bool czyZnaleziono = 0;
@@ -448,13 +452,43 @@ void Osoba::logowanie()				//logowanie
 			}
 			if (ZapisaneHaslo == haslo)		//sprawdzenie poprawnosci hasla pobranego z pliku z podanym przez osobe
 			{
-				cout << "Haslo jest poprawne";			//jesli jest poprawne
-				Sleep(1000);
-				system("cls");
-				break;
-			}
+                cout << "Haslo jest poprawne";			//jesli jest poprawne
+				
+                if(lekarzczypacjent=="lekarz")			//jesli loguje sie lekarz
+                {
+                    l.imie=wyswietlzbazylekarzy(pesel,"imie");		//przypisanie wartosci obiektu jako informacje zawarte w bazie
+                    l.nazwisko=wyswietlzbazylekarzy(pesel,"nazwisko");
+                    l.adres=wyswietlzbazylekarzy(pesel,"adres");
+                    l.pesel=wyswietlzbazylekarzy(pesel,"pesel");
+                    l.haslo=wyswietlzbazylekarzy(pesel,"haslo");
+                    l.specjalizacja=wyswietlzbazylekarzy(pesel,"specjalizacja");
+                    stringstream temp1(wyswietlzbazylekarzy(pesel,"godzinarozpoczecia"));
+                    temp1>>l.godzinaRozpoczeciaPracy;
+                    stringstream temp2(wyswietlzbazylekarzy(pesel,"godzinazakonczenia"));
+                    temp2>>l.godzinaZakonczeniaPracy;
+                }
+                else if(lekarzczypacjent=="pacjent")				//jesli loguje sie pacjent
+                {
+                    p.imie=wyswietlzbazypacjentow(pesel,"imie");		//przypisanie wartosci obiektu jako informacje zawarte w bazie
+                    p.nazwisko=wyswietlzbazypacjentow(pesel,"nazwisko");
+                    p.adres=wyswietlzbazypacjentow(pesel,"adres");
+                    p.pesel=wyswietlzbazypacjentow(pesel,"pesel");
+                    p.haslo=wyswietlzbazypacjentow(pesel,"haslo");
+
+
+                }
+                else
+                {
+                    cout<<"Blad - nie stwierdzono kim jestes";
+                }
+
+
+                Sleep(1000);
+                system("cls");
+                break;
+            }
 			else
-				cout << "Haslo jest niepoprawne!" << endl;	//jesli jest bledne
+				cout << "Haslo jest niepoprawne!" << endl;	//jesli haslo jest bledne
 		}
 	}
 
@@ -463,7 +497,7 @@ void Osoba::logowanie()				//logowanie
 		cout << "Bledne dane, wpisz ponownie\n";
 		Sleep(2000);
 		system("cls");
-		logowanie();					//ponowna probra zalogowania
+		logowanie(lekarzczypacjent);					//ponowna probra zalogowania
 	}
 	Hasla.close();
 	peselGlob = pesel;					//przypisanie uzywanego peselu jako pesel zalogowanej osoby
@@ -1123,7 +1157,12 @@ void Pacjent::umow_wizyte(Pacjent P)
 
 
 
-//MAIN
+
+
+
+///////////////////////////////////////////////////////////////////MAIN/////////////////////////////////////////////////////////////////
+
+
 int main()
 {
 	Porada porada;
@@ -1351,4 +1390,5 @@ int main()
 			}
 		}
 	}
+	return 0;
 }
