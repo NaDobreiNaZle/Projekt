@@ -348,7 +348,7 @@ public:
 	string adres;
 	string pesel;
 	string haslo;
-	void logowanie();
+	void logowanie(string lekarzczypacjent);
 	void wyswietlDane(string pesel);
 };
 
