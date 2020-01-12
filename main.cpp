@@ -756,9 +756,9 @@ void KartaChorob::wyswietlKarteChorob(string pesel)		//wyswietlenie danej karty 
 }
 
 
-void Porada::wyswOdpowiedzi()
+void Porada::wyswOdpowiedzi()		//wyswietlenie odpowiedzi lekarza na zadane przez pacjenta zapytania
 {
-	cout << "1.Nowe odpowiedzi \n2.Stare odpowiedzi" << endl;
+	cout << "1.Nowe odpowiedzi \n2.Stare odpowiedzi" << endl;	//wybor miedzy wyswietleniem odpowiedzi na ostatnie zapytanie,a wszystkimi zapytaniami zadawanymi przez danego pacjenta
 	int odp;
 	cin >> odp;
 	int i = 0;
@@ -768,40 +768,40 @@ void Porada::wyswOdpowiedzi()
 		nazwa += peselGlob;
 		nazwa += ".txt";
 		string tekst;
-		fstream Porady(nazwa.c_str());
-		if (Porady)
+		fstream Porady(nazwa.c_str());	//otwarcie strumienia dla plikow o nazwach skladajacych sie z "internetowe" oraz peselu pacjenta
+		if (Porady) 	//jezeli taki plik o takiej nazwie istnieje
 		{
-			while (!Porady.eof())
+			while (!Porady.eof())	//az do konca plika
 			{
-				getline(Porady, tekst);
+				getline(Porady, tekst);		//pobieranie tekstu z pliku
 
-				if (!(string::npos == tekst.find("Odpowiedz lekarza: ")))
+				if (!(string::npos == tekst.find("Odpowiedz lekarza: ")))	//sprawdzenie czy lekarz udzielil juz odpowiedzi na zapytanie poprzez wyszukanie frazy w pobranym z pliku tekscie
 					i++;
 			}
 			Porady.close();
 
-			if (i > 0)
+			if (i > 0)		//jezeli znaleziono w pliku fraze "Odpowiedz lekarza: "
 			{
-				Porady.open(nazwa.c_str(), ios::app | ios::in);
-				cout << Porady.rdbuf();
+				Porady.open(nazwa.c_str(), ios::app | ios::in);		//otwarcie pliku danego pacjenta
+				cout << Porady.rdbuf();		//wyswietlenie calej zawartosci pliku
 				Porady.close();
-				remove(nazwa.c_str());
+				remove(nazwa.c_str());		//usuniecie pliku z najnowszymi odpowiedziami, po odczytaniu
 			}
 
 			else
-				cout << "Brak nowych odpowiedzi" << endl;
+				cout << "Brak nowych odpowiedzi" << endl;	//jezeli w pliku nie znaleziono frazy z odpowiedzia
 		}
 
 		else
-			cout << "Nie masz oczekujacych odpowiedzi" << endl;
+			cout << "Nie masz oczekujacych odpowiedzi" << endl; 	//jezeli plik nie istnieje
 	}
 
-	else if (odp == 2)
+	else if (odp == 2)		//analogiczne dzialanie, ale dla pliku ze wszystkimi poprzednimi zapytaniami i odpowiedziami
 
 	{
 		fstream starePorady;
 
-		string nazwa2 = "internetoweS";
+		string nazwa2 = "internetoweS";		
 
 		nazwa2 += peselGlob;
 		nazwa2 += ".txt";
@@ -813,7 +813,7 @@ void Porada::wyswOdpowiedzi()
 }
 
 
-void Porada::wyswPorady()
+void Porada::wyswPorady()	//wyswietlenie w prfilu lekarza zapytan pacjentow, na ktore nie udzielono jeszcze odpowiedzi
 {
 	cout << "Oczekujace zapytania internetowe oraz recepty " << endl;
 
@@ -823,38 +823,38 @@ void Porada::wyswPorady()
 	string tresc;
 
 	fstream Hasla;
-	Hasla.open("PlikZHaslami.txt");
+	Hasla.open("PlikZHaslami.txt");		
 	string pobranePesele;
 
 	cin.ignore();
 
-	while (Hasla >> pobranePesele)
+	while (Hasla >> pobranePesele)	//pobranie z bazy danych do logowania pacjentow wszystkich peselow
 	{
 		string nazwa = "internetowe";
-		Hasla.ignore(numeric_limits<streamsize>::max(), '\n');
+		Hasla.ignore(numeric_limits<streamsize>::max(), '\n');	//pobranie z kazdej linijki pierwszego ciagu cyfr(stanawiacego pesel pacjenta) i zignorowanie reszty linijki
 		nazwa += pobranePesele;
 		nazwa += ".txt";
 
-		fstream Porady(nazwa.c_str());
+		fstream Porady(nazwa.c_str()); 	//otwarcie strumienia dla plikow o nazwach skladajacych sie z "internetowe" oraz peselu pacjenta
 
 
-		if (Porady)
+		if (Porady)	//jezeli plik o takiej nazwie istenije
 		{
-			Porady.open(nazwa.c_str(), ios::in);
-			cout << Porady.rdbuf();
-			Porady.open(nazwa.c_str(), ios::app);
+			Porady.open(nazwa.c_str(), ios::in);		//otwarcie pliku do odczytania
+			cout << Porady.rdbuf();		//wyswietlenie jego zawartosci
+			Porady.open(nazwa.c_str(), ios::app);	//otwarcie pliku do dopisania tekstu
 			cout << "Odpowiedz: " << endl;
-			getline(cin, tresc);
+			getline(cin, tresc);		//pobranie od lekarza odpowiedzi na zapytanie pacjenta
 			cout << "\n";
-			Porady << "Odpowiedz lekarza: " << tresc << endl;
+			Porady << "Odpowiedz lekarza: " << tresc << endl;	//dopisanie do pliku frazy "Odpowiedz lekarza: " oraz pobranej tresci odpowiedzi
 			Porady.close();
 
 			string nazwa2 = "internetoweS";
 			nazwa2 += pobranePesele;
 			nazwa2 += ".txt";
-			starePorady.open(nazwa2.c_str(), ios::app);
+			starePorady.open(nazwa2.c_str(), ios::app);		
 
-			starePorady << "Odpowiedz lekarza: " << tresc << endl;
+			starePorady << "Odpowiedz lekarza: " << tresc << endl;		//analogiczne dzialanie (dopisanie odpowiedzi lekarza) do pliku ze wszystkimi zapytaniami pacjenta (utworzenie w ten sposob historii wszystkich zapytan i odpowiedzi)
 		}
 	}
 
@@ -862,18 +862,18 @@ void Porada::wyswPorady()
 }
 
 
-void Porada::dodawanie_porady()
+void Porada::dodawanie_porady()		//dodawanie przez pacjenta zapytania do lekarza lub prosby o wypisanie recepty
 {
 	SYSTEMTIME st;
-	GetSystemTime(&st);
+	GetSystemTime(&st);		//pobranie aktualnego czasu
 
 
 	cout << "Dodaj zapytanie internetowe lub recepte oczekujaca" << endl;
 
 	system("cls");
-	fstream Porady;
+	fstream Porady; 	
 
-	fstream starePorady;
+	fstream starePorady;		
 	string nazwa = "internetowe";
 	string nazwa2 = "internetoweS";
 
@@ -882,30 +882,30 @@ void Porada::dodawanie_porady()
 	nazwa2 += peselGlob;
 	nazwa2 += ".txt";
 
-	Porady.open(nazwa.c_str(), ios::app);
-	starePorady.open(nazwa2.c_str(), ios::app);
+	Porady.open(nazwa.c_str(), ios::app);		//otwarcie pliku o nazwie skladajacej sie z "internetowe" oraz peselu pacjenta, w ktorym zapisywane jest najnowsze zapytanie
+	starePorady.open(nazwa2.c_str(), ios::app);	//analogicznie, ale dla pliku o innej nazwie, w ktorym zapisywane sa wszystkie zapytania danego pacjenta
 	cout << "DODAWANIE ZAPYTANIA INTERNETOWEGO" << endl;
 	cout << "Podaj tresc: ";
 	string trescZapytania;
 	cin.ignore();
-	getline(cin, trescZapytania);
-	Porady << trescZapytania << "  ";
-	starePorady << trescZapytania << "  ";
+	getline(cin, trescZapytania);		//pobrani od pacjenta tresci zapytania
+	Porady << trescZapytania << "  ";	//zapis do pliku z najnowszym zapytaniem pobranej tresci
+	starePorady << trescZapytania << "  ";	//zapis do pliku ze wszystkimi zapytaniami pobranej tresci, w celu utworzenia historii wszystkich zapytan pacjenta
 
 	cout << "Data dodania: ";
-	cout << st.wDay << "." << st.wMonth << "." << st.wYear << endl;
+	cout << st.wDay << "." << st.wMonth << "." << st.wYear << endl;		//wyswietlenie aktualnej daty dodania zapytania
 	cout << "Godzina dodania: ";
 
 	cout << st.wHour << ":";
 	if (st.wMinute < 10)
 		cout << "0" << st.wMinute << ":";
 	else
-		cout << st.wMinute << ":";
+		cout << st.wMinute << ":";					//wyswietlenie aktualnej godziny dodania zapytania
 	if (st.wSecond < 10)
 		cout << "0" << st.wSecond << endl;
 	else
 		cout << st.wSecond << endl;
-	Porady << "\nData dodania: " << st.wDay << "." << st.wMonth << "." << st.wYear << "  ";
+	Porady << "\nData dodania: " << st.wDay << "." << st.wMonth << "." << st.wYear << "  ";		//zapis do pliku daty i godziny dodania zapytania
 	Porady << "Godzina dodania: " << st.wHour << ":";
 	if (st.wMinute < 10)
 		Porady << "0" << st.wMinute << ":";
@@ -918,7 +918,7 @@ void Porada::dodawanie_porady()
 
 
 
-	starePorady << "\nData dodania: " << st.wDay << "." << st.wMonth << "." << st.wYear << "  ";
+	starePorady << "\nData dodania: " << st.wDay << "." << st.wMonth << "." << st.wYear << "  ";		//analogicznie dla pliku ze wszystkimi zapytaniami pacjenta
 	starePorady << "Godzina dodania: " << st.wHour << ":";
 	if (st.wMinute < 10)
 		starePorady << "0" << st.wMinute << ":";
